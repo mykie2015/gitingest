@@ -1,0 +1,24 @@
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j
+    restart: unless-stopped
+    environment:
+      # Username / password for initial login
+      - NEO4J_AUTH=neo4j/graph1234
+      # APOC is included by default in community 5; enabling unrestricted procedures
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      # Allow LOAD CSV FROM file URLs (for /import mount)
+      - NEO4J_dbms_security_allow__csv__import__from__file__urls=true
+    ports:
+      # Browser @ 7474; Bolt @ 7687
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      # Persisted db files
+      - neo4j_data:/data
+      # Make our CSVs + cypher script visible inside the container under /import
+      - ./neo4j/neo4j_csv:/import
+
+volumes:
+  neo4j_data: 
