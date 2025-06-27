@@ -1,0 +1,28 @@
+# PRD: Enhance Neo4j Tooling for Gitingest
+
+## Overview
+Improve developer experience for visualising a repository's file/function call graph in Neo4j. Provide better documentation and stronger validation scripts.
+
+## Functional Requirements
+1. **Neo4j README**
+   - Deliver a detailed `neo4j/README.md` with setup, workflow, script explanations, troubleshooting.
+2. **Schema-aware Health-check**
+   - Extend `neo4j/check_neo4j.sh` with STRICT mode that:
+     - Fails when node/relationship counts are zero.
+     - Verifies expected node labels (`Entity`) and relationship types (`CONTAINS`, `CALLS`, `INHERITS`).
+     - Allows overrides via `EXPECTED_LABELS` and `EXPECTED_REL_TYPES` environment variables.
+3. **README Update**
+   - Document the new STRICT mode usage and environment overrides.
+
+## Non-Functional Requirements
+- Scripts must be bash-compatible and CI-friendly (exit non-zero on failure).
+- Documentation should be concise but comprehensive.
+
+## Deliverables
+- `neo4j/README.md`
+- Updated `neo4j/check_neo4j.sh`
+- Updated documentation snippets in README.
+
+## Acceptance Criteria
+- Running the documented workflow loads data; `check_neo4j.sh` passes in STRICT mode.
+- Misconfigured EXPECTED_* vars cause the script to fail as expected. 

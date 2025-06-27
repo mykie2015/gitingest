@@ -60,7 +60,11 @@ The script will:
 ### 5. Sanity check
 
 ```bash
-bash neo4j/check_neo4j.sh        # prints counts
+# basic counts
+bash neo4j/check_neo4j.sh
+
+# strict mode + schema validation
+STRICT=1 bash neo4j/check_neo4j.sh
 ```
 
 ### 6. Explore!
@@ -88,7 +92,20 @@ The script honours two optional environment variables:
 * `NEO4J_PASSWORD`  – password (default `graph1234`)
 
 ### `check_neo4j.sh`
-Same flags & env vars as above.  In *strict* mode the script returns non-zero if counts differ from the CSV row counts (CI-friendly).
+Same flags & env vars as above.  When you set `STRICT=1` it now also validates the graph **schema** in addition to counts.
+
+Schema-related environment variables:
+
+* `EXPECTED_LABELS` – space-separated list of node labels that must exist (default: `Entity`)
+* `EXPECTED_REL_TYPES` – space-separated list of relationship types that must exist (default: `CONTAINS CALLS INHERITS`)
+
+Example strict run:
+
+```bash
+STRICT=1 EXPECTED_LABELS="Entity" EXPECTED_REL_TYPES="CONTAINS CALLS" bash neo4j/check_neo4j.sh
+```
+
+If any expectation fails, the script exits with status 1 – perfect for CI pipelines.
 
 ---
 
